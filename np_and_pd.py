@@ -101,3 +101,38 @@ print(recent_grads.groupby('major_category').gender_diff.mean())
 # Find average number of low wage jobs and unemployment rate of each major category
 dept_stats = recent_grads.groupby(['major_category'])['low_wage_jobs', 'unemployment_rate'].mean()
 print(dept_stats)
+
+# Print the size of the DataFrame
+print(recent_grads.size)
+
+# Drop all rows with a missing value
+recent_grads.dropna(axis=0, inplace=True)
+
+# Print the size of the DataFrame
+print(recent_grads.size)
+
+
+# Convert to numeric and divide by 1000
+recent_grads['median'] = pd.to_numeric(recent_grads['median']) /1000
+recent_grads['p25th'] = pd.to_numeric(recent_grads['p25th']) /1000
+recent_grads['p75th'] = pd.to_numeric(recent_grads['p75th']) /1000
+
+# Select averages by major category
+columns = ['median', 'p25th', 'p75th']
+sal_quantiles = recent_grads.groupby('major_category')[columns].mean()
+
+# Plot the data
+sal_quantiles.plot()
+
+# Set xticks
+plt.xticks(
+    np.arange(len(sal_quantiles.index)),
+    sal_quantiles.index, 
+    rotation='vertical')
+
+# Show the plot
+plt.show()
+
+# Plot with subplots
+sal_quantiles.plot(subplots=True)
+plt.show()
